@@ -27,7 +27,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                 const SizedBox(width: 10),
 
-                const Text("Complaints"),
+                const Text("Complaints "),
               ],
             ),
 
@@ -61,6 +61,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
           }
         },
 
+        // backgroundColor: Colors.blue,
         child: const Icon(Icons.add),
       ),
 
