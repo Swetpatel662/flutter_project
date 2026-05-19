@@ -34,7 +34,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.complaint == null ? "Add Complaint" : "Edit Complaint",
+          widget.complaint == null ? "Add Complain" : "Edit Complain",
         ),
       ),
 
