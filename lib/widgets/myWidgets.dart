@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
         height: double.infinity,
 
         // Background Color
-        color: const Color.fromARGB(144, 240, 252, 151),
+        color: const Color.fromARGB(144, 177, 206, 207),
 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
