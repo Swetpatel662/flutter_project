@@ -27,7 +27,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                 const SizedBox(width: 10),
 
-                const Text("All Complains"),
+                const Text("All Complain"),
               ],
             ),
 
