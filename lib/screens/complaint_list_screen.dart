@@ -63,6 +63,8 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
           if (result != null) {
             setState(() {
               complaints.add({
+                "room": result["room"],
+
                 "title": result["title"],
 
                 "description": result["description"],
@@ -153,6 +155,18 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                             children: [
                               Text(
+                                "Room No: ${filteredComplaints[index]["room"]}",
+
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+
+                                  fontSize: 16,
+                                ),
+                              ),
+
+                              const SizedBox(height: 8),
+
+                              Text(
                                 filteredComplaints[index]["title"]!,
 
                                 style: const TextStyle(
@@ -208,6 +222,8 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                                   if (result != null) {
                                     setState(() {
                                       filteredComplaints[index] = {
+                                        "room": result["room"],
+
                                         "title": result["title"],
 
                                         "description": result["description"],
