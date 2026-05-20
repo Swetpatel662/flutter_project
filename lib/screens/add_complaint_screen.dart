@@ -91,7 +91,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
               },
 
               decoration: const InputDecoration(
-                labelText: "Status",
+                labelText: "status",
 
                 border: OutlineInputBorder(),
               ),
