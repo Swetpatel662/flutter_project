@@ -96,7 +96,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                     });
                   },
 
-                  child: const Text("All"),
+                  child: const Text("all"),
                 ),
 
                 ElevatedButton(
