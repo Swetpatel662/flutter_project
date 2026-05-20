@@ -125,6 +125,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
                   if (roomController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Please enter Room No")),
+                      const SnackBar(content: Text("Please enter Room No.")),
                     );
 
                     return;
