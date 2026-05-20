@@ -10,6 +10,8 @@ class AddComplaintScreen extends StatefulWidget {
 }
 
 class _AddComplaintScreenState extends State<AddComplaintScreen> {
+  TextEditingController roomController = TextEditingController();
+
   TextEditingController titleController = TextEditingController();
 
   TextEditingController descriptionController = TextEditingController();
@@ -21,6 +23,8 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
     super.initState();
 
     if (widget.complaint != null) {
+      roomController.text = widget.complaint!["room"] ?? "";
+
       titleController.text = widget.complaint!["title"]!;
 
       descriptionController.text = widget.complaint!["description"]!;
@@ -34,7 +38,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.complaint == null ? "Add Complain" : "Edit Complain",
+          widget.complaint == null ? "Add Complaint" : "Edit Complaint",
         ),
       ),
 
@@ -43,6 +47,20 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
 
         child: Column(
           children: [
+            TextField(
+              controller: roomController,
+
+              keyboardType: TextInputType.number,
+
+              decoration: const InputDecoration(
+                labelText: "Room Number",
+
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
             TextField(
               controller: titleController,
 
@@ -104,7 +122,18 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
 
               child: ElevatedButton(
                 onPressed: () {
+                  if (roomController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Please Enter Room No")),
+                      //const SnackBar(content: Text("Please enter Room No.")),
+                    );
+
+                    return;
+                  }
+
                   Navigator.pop(context, {
+                    "room": roomController.text,
+
                     "title": titleController.text,
 
                     "description": descriptionController.text,
