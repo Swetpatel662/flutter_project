@@ -126,7 +126,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                     });
                   },
 
-                  child: const Text("Solved"),
+                  child: const Text("solved"),
                 ),
               ],
             ),
