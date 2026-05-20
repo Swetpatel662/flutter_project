@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'add_complaint_screen.dart';
+import '../models/complaint_model.dart';
 
 class ComplaintListScreen extends StatefulWidget {
   const ComplaintListScreen({super.key});
@@ -11,17 +12,37 @@ class ComplaintListScreen extends StatefulWidget {
 }
 
 class _ComplaintListScreenState extends State<ComplaintListScreen> {
-  List<Map<String, String>> complaints = [];
+  // DUMMY DATA (OBJECTS)
+  List<ComplaintModel> complaints = [
+    ComplaintModel(
+      title: "Water Problem",
+      description: "No water supply",
+      status: "Pending",
+    ),
+
+    ComplaintModel(
+      title: "Road Damage",
+      description: "Road is broken",
+      status: "In Progress",
+    ),
+
+    ComplaintModel(
+      title: "Electricity Issue",
+      description: "Power cut in area",
+      status: "Solved",
+    ),
+  ];
 
   String selectedFilter = "All";
 
-  List<Map<String, String>> get filteredComplaints {
+  // FILTER METHOD
+  List<ComplaintModel> get filteredComplaints {
     if (selectedFilter == "All") {
       return complaints;
     }
 
     return complaints.where((complaint) {
-      return complaint["status"] == selectedFilter;
+      return complaint.status == selectedFilter;
     }).toList();
   }
 
@@ -52,6 +73,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
         ),
       ),
 
+      // ADD BUTTON
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await Navigator.push(
@@ -60,15 +82,16 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
             MaterialPageRoute(builder: (context) => const AddComplaintScreen()),
           );
 
+          // ADD NEW COMPLAINT
           if (result != null) {
             setState(() {
-              complaints.add({
-                "title": result["title"],
-
-                "description": result["description"],
-
-                "status": result["status"],
-              });
+              complaints.add(
+                ComplaintModel(
+                  title: result["title"],
+                  description: result["description"],
+                  status: result["status"],
+                ),
+              );
             });
           }
         },
@@ -78,6 +101,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
       body: Column(
         children: [
+          // FILTER BUTTONS
           Container(
             color: Colors.blue.shade100,
 
@@ -130,6 +154,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
             ),
           ),
 
+          // LIST
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(10),
@@ -152,47 +177,46 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
 
                             children: [
+                              // TITLE
                               Text(
-                                filteredComplaints[index]["title"]!,
+                                filteredComplaints[index].title,
 
                                 style: const TextStyle(
                                   fontSize: 18,
-
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
 
                               const SizedBox(height: 8),
 
-                              Text(filteredComplaints[index]["description"]!),
+                              // DESCRIPTION
+                              Text(filteredComplaints[index].description),
 
                               const SizedBox(height: 10),
 
+                              // STATUS
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
-
                                   vertical: 6,
                                 ),
 
                                 decoration: BoxDecoration(
                                   color: Colors.blue.shade100,
-
                                   borderRadius: BorderRadius.circular(20),
                                 ),
 
-                                child: Text(
-                                  filteredComplaints[index]["status"]!,
-                                ),
+                                child: Text(filteredComplaints[index].status),
                               ),
                             ],
                           ),
                         ),
 
-                        if (filteredComplaints[index]["status"] !=
-                            "In Progress")
+                        // EDIT + DELETE BUTTONS
+                        if (filteredComplaints[index].status != "In Progress")
                           Column(
                             children: [
+                              // EDIT
                               IconButton(
                                 onPressed: () async {
                                   final result = await Navigator.push(
@@ -200,20 +224,19 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                                     MaterialPageRoute(
                                       builder: (context) => AddComplaintScreen(
-                                        complaint: filteredComplaints[index],
+                                        //complaint: filteredComplaints[index],
                                       ),
                                     ),
                                   );
 
                                   if (result != null) {
                                     setState(() {
-                                      filteredComplaints[index] = {
-                                        "title": result["title"],
-
-                                        "description": result["description"],
-
-                                        "status": result["status"],
-                                      };
+                                      filteredComplaints[index] =
+                                          ComplaintModel(
+                                            title: result["title"],
+                                            description: result["description"],
+                                            status: result["status"],
+                                          );
                                     });
                                   }
                                 },
@@ -221,6 +244,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                                 icon: const Icon(Icons.edit),
                               ),
 
+                              // DELETE
                               IconButton(
                                 onPressed: () {
                                   setState(() {
