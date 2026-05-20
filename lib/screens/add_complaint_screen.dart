@@ -109,7 +109,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
               },
 
               decoration: const InputDecoration(
-                labelText: "status",
+                labelText: "Status",
 
                 border: OutlineInputBorder(),
               ),
@@ -124,6 +124,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
                 onPressed: () {
                   if (roomController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Please enter Room No")),
                       const SnackBar(content: Text("Please enter Room No.")),
                     );
 
