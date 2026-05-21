@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_complaint/screens/holder_screen.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
@@ -174,7 +175,13 @@ class SignupScreen extends StatelessWidget {
                 height: 50,
 
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+
+                      MaterialPageRoute(builder: (context) => HolderScreen()),
+                    );
+                  },
 
                   child: Text(
                     "SIGN UP",

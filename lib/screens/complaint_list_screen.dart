@@ -15,18 +15,21 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
   // DUMMY DATA (OBJECTS)
   List<ComplaintModel> complaints = [
     ComplaintModel(
+      room: "101",
       title: "Water Problem",
       description: "No water supply",
       status: "Pending",
     ),
 
     ComplaintModel(
+      room: "102",
       title: "Road Damage",
       description: "Road is broken",
       status: "In Progress",
     ),
 
     ComplaintModel(
+      room: "103",
       title: "Electricity Issue",
       description: "Power cut in area",
       status: "Solved",
@@ -87,6 +90,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
             setState(() {
               complaints.add(
                 ComplaintModel(
+                  room: result["101"],
                   title: result["title"],
                   description: result["description"],
                   status: result["status"],
@@ -179,6 +183,17 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                             children: [
                               // TITLE
                               Text(
+                                "Room No.: ${filteredComplaints[index].room}",
+
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
                                 filteredComplaints[index].title,
 
                                 style: const TextStyle(
@@ -233,6 +248,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                                     setState(() {
                                       filteredComplaints[index] =
                                           ComplaintModel(
+                                            room: result["room"],
                                             title: result["title"],
                                             description: result["description"],
                                             status: result["status"],

@@ -33,8 +33,7 @@ class _HolderScreenState extends State<HolderScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.list), label: "Complaints"),
 
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add"),
-
+          //BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
