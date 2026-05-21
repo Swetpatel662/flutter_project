@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../models/complaint_model.dart';
+
 class AddComplaintScreen extends StatefulWidget {
-  final Map<String, String>? complaint;
+  final ComplaintModel? complaint;
 
   const AddComplaintScreen({super.key, this.complaint});
 
@@ -22,14 +24,15 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
   void initState() {
     super.initState();
 
+    // EDIT MODE
     if (widget.complaint != null) {
-      roomController.text = widget.complaint!["room"] ?? "";
+      roomController.text = widget.complaint!.room;
 
-      titleController.text = widget.complaint!["title"]!;
+      titleController.text = widget.complaint!.title;
 
-      descriptionController.text = widget.complaint!["description"]!;
+      descriptionController.text = widget.complaint!.description;
 
-      selectedStatus = widget.complaint!["status"]!;
+      selectedStatus = widget.complaint!.status;
     }
   }
 
@@ -45,107 +48,134 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
 
-        child: Column(
-          children: [
-            TextField(
-              controller: roomController,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // ROOM NUMBER
+              TextField(
+                controller: roomController,
 
-              keyboardType: TextInputType.number,
+                keyboardType: TextInputType.number,
 
-              decoration: const InputDecoration(
-                labelText: "Room Number",
+                decoration: const InputDecoration(
+                  labelText: "Room Number",
 
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            TextField(
-              controller: titleController,
-
-              decoration: const InputDecoration(
-                labelText: "Title",
-
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            TextField(
-              controller: descriptionController,
-
-              maxLines: 4,
-
-              decoration: const InputDecoration(
-                labelText: "Description",
-
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            DropdownButtonFormField(
-              value: selectedStatus,
-
-              items: const [
-                DropdownMenuItem(value: "Pending", child: Text("Pending")),
-
-                DropdownMenuItem(
-                  value: "In Progress",
-
-                  child: Text("In Progress"),
+                  border: OutlineInputBorder(),
                 ),
-
-                DropdownMenuItem(value: "Solved", child: Text("Solved")),
-              ],
-
-              onChanged: (value) {
-                setState(() {
-                  selectedStatus = value!;
-                });
-              },
-
-              decoration: const InputDecoration(
-                labelText: "Status",
-
-                border: OutlineInputBorder(),
               ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            SizedBox(
-              width: double.infinity,
+              // TITLE
+              TextField(
+                controller: titleController,
 
-              child: ElevatedButton(
-                onPressed: () {
-                  if (roomController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Please Enter Room No")),
-                      //const SnackBar(content: Text("Please enter Room No.")),
-                    );
+                decoration: const InputDecoration(
+                  labelText: "Title",
 
-                    return;
-                  }
+                  border: OutlineInputBorder(),
+                ),
+              ),
 
-                  Navigator.pop(context, {
-                    "room": roomController.text,
+              const SizedBox(height: 20),
 
-                    "title": titleController.text,
+              // DESCRIPTION
+              TextField(
+                controller: descriptionController,
 
-                    "description": descriptionController.text,
+                maxLines: 4,
 
-                    "status": selectedStatus,
+                decoration: const InputDecoration(
+                  labelText: "Description",
+
+                  border: OutlineInputBorder(),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // STATUS
+              DropdownButtonFormField<String>(
+                value: selectedStatus,
+
+                items: const [
+                  DropdownMenuItem(value: "Pending", child: Text("Pending")),
+
+                  DropdownMenuItem(
+                    value: "In Progress",
+                    child: Text("In Progress"),
+                  ),
+
+                  DropdownMenuItem(value: "Solved", child: Text("Solved")),
+                ],
+
+                onChanged: (value) {
+                  setState(() {
+                    selectedStatus = value!;
                   });
                 },
 
-                child: Text(widget.complaint == null ? "Add" : "Update"),
+                decoration: const InputDecoration(
+                  labelText: "Status",
+
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 20),
+
+              // BUTTON
+              SizedBox(
+                width: double.infinity,
+
+                child: ElevatedButton(
+                  onPressed: () {
+                    // ROOM VALIDATION
+                    if (roomController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please Enter Room No")),
+                      );
+
+                      return;
+                    }
+
+                    // TITLE VALIDATION
+                    if (titleController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please Enter Title")),
+                      );
+
+                      return;
+                    }
+
+                    // DESCRIPTION VALIDATION
+                    if (descriptionController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please Enter Description"),
+                        ),
+                      );
+
+                      return;
+                    }
+
+                    // RETURN DATA
+                    Navigator.pop(context, {
+                      "room": roomController.text,
+
+                      "title": titleController.text,
+
+                      "description": descriptionController.text,
+
+                      "status": selectedStatus,
+                    });
+                  },
+
+                  child: Text(widget.complaint == null ? "Add" : "Update"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

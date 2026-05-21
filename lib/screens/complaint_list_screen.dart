@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'add_complaint_screen.dart';
 import '../models/complaint_model.dart';
+import 'add_complaint_screen.dart';
 
 class ComplaintListScreen extends StatefulWidget {
   const ComplaintListScreen({super.key});
@@ -12,31 +15,73 @@ class ComplaintListScreen extends StatefulWidget {
 }
 
 class _ComplaintListScreenState extends State<ComplaintListScreen> {
-  // DUMMY DATA (OBJECTS)
-  List<ComplaintModel> complaints = [
-    ComplaintModel(
-      room: "101",
-      title: "Water Problem",
-      description: "No water supply",
-      status: "Pending",
-    ),
+  // COMPLAINT LIST
+  List<ComplaintModel> complaints = [];
 
-    ComplaintModel(
-      room: "102",
-      title: "Road Damage",
-      description: "Road is broken",
-      status: "In Progress",
-    ),
-
-    ComplaintModel(
-      room: "103",
-      title: "Electricity Issue",
-      description: "Power cut in area",
-      status: "Solved",
-    ),
-  ];
-
+  // FILTER
   String selectedFilter = "All";
+
+  // SCREEN START
+  @override
+  void initState() {
+    super.initState();
+
+    loadComplaints();
+  }
+
+  // SAVE COMPLAINTS
+  Future<void> saveComplaints() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> complaintList = complaints.map((complaint) {
+      return jsonEncode(complaint.toJson());
+    }).toList();
+
+    await prefs.setStringList("complaints", complaintList);
+  }
+
+  // LOAD COMPLAINTS
+  Future<void> loadComplaints() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String>? complaintList = prefs.getStringList("complaints");
+
+    // IF DATA EXISTS
+    if (complaintList != null) {
+      complaints = complaintList.map((item) {
+        return ComplaintModel.fromJson(jsonDecode(item));
+      }).toList();
+    } else {
+      // DEFAULT DUMMY DATA
+
+      complaints = [
+        ComplaintModel(
+          room: "101",
+          title: "Water Problem",
+          description: "No water supply",
+          status: "Pending",
+        ),
+
+        ComplaintModel(
+          room: "102",
+          title: "Road Damage",
+          description: "Road is broken",
+          status: "In Progress",
+        ),
+
+        ComplaintModel(
+          room: "103",
+          title: "Electricity Issue",
+          description: "Power cut in area",
+          status: "Solved",
+        ),
+      ];
+
+      await saveComplaints();
+    }
+
+    setState(() {});
+  }
 
   // FILTER METHOD
   List<ComplaintModel> get filteredComplaints {
@@ -90,13 +135,18 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
             setState(() {
               complaints.add(
                 ComplaintModel(
-                  room: result["101"],
+                  room: result["room"],
+
                   title: result["title"],
+
                   description: result["description"],
+
                   status: result["status"],
                 ),
               );
             });
+
+            await saveComplaints();
           }
         },
 
@@ -181,23 +231,28 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
 
                             children: [
-                              // TITLE
+                              // ROOM
                               Text(
                                 "Room No.: ${filteredComplaints[index].room}",
 
                                 style: const TextStyle(
                                   fontSize: 14,
+
                                   fontWeight: FontWeight.bold,
 
                                   color: Colors.grey,
                                 ),
                               ),
+
                               const SizedBox(height: 8),
+
+                              // TITLE
                               Text(
                                 filteredComplaints[index].title,
 
                                 style: const TextStyle(
                                   fontSize: 18,
+
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -218,6 +273,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                                 decoration: BoxDecoration(
                                   color: Colors.blue.shade100,
+
                                   borderRadius: BorderRadius.circular(20),
                                 ),
 
@@ -227,7 +283,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                           ),
                         ),
 
-                        // EDIT + DELETE BUTTONS
+                        // EDIT + DELETE
                         if (filteredComplaints[index].status != "In Progress")
                           Column(
                             children: [
@@ -239,21 +295,27 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                                     MaterialPageRoute(
                                       builder: (context) => AddComplaintScreen(
-                                        //complaint: filteredComplaints[index],
+                                        complaint: filteredComplaints[index],
                                       ),
                                     ),
                                   );
 
                                   if (result != null) {
                                     setState(() {
-                                      filteredComplaints[index] =
-                                          ComplaintModel(
-                                            room: result["room"],
-                                            title: result["title"],
-                                            description: result["description"],
-                                            status: result["status"],
-                                          );
+                                      complaints[complaints.indexOf(
+                                        filteredComplaints[index],
+                                      )] = ComplaintModel(
+                                        room: result["room"],
+
+                                        title: result["title"],
+
+                                        description: result["description"],
+
+                                        status: result["status"],
+                                      );
                                     });
+
+                                    await saveComplaints();
                                   }
                                 },
 
@@ -262,12 +324,14 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                               // DELETE
                               IconButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   setState(() {
                                     complaints.remove(
                                       filteredComplaints[index],
                                     );
                                   });
+
+                                  await saveComplaints();
                                 },
 
                                 icon: const Icon(Icons.delete),
