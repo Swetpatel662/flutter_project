@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // TOP SECTION
-            const SizedBox(height: 160),
+            const SizedBox(height: 50),
             Icon(
               Icons.account_circle,
               size: 100,
@@ -164,7 +164,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 40),
+            //SizedBox(height: 40),
 
             // BOTTOM SECTION
             Container(

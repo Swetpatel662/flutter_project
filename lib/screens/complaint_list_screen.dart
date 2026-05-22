@@ -21,11 +21,9 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
   // FILTER
   String selectedFilter = "All";
 
-  // SCREEN START
   @override
   void initState() {
     super.initState();
-
     loadComplaints();
   }
 
@@ -46,14 +44,11 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
     List<String>? complaintList = prefs.getStringList("complaints");
 
-    // IF DATA EXISTS
     if (complaintList != null) {
       complaints = complaintList.map((item) {
         return ComplaintModel.fromJson(jsonDecode(item));
       }).toList();
     } else {
-      // DEFAULT DUMMY DATA
-
       complaints = [
         ComplaintModel(
           room: "101",
@@ -100,7 +95,6 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
           children: [
             Row(
               children: [
@@ -114,7 +108,6 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
             Text(
               DateFormat('dd MMM yyyy').format(DateTime.now()),
-
               style: const TextStyle(fontSize: 14),
             ),
           ],
@@ -126,7 +119,6 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
         onPressed: () async {
           final result = await Navigator.push(
             context,
-
             MaterialPageRoute(builder: (context) => const AddComplaintScreen()),
           );
 
@@ -136,11 +128,8 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
               complaints.add(
                 ComplaintModel(
                   room: result["room"],
-
                   title: result["title"],
-
                   description: result["description"],
-
                   status: result["status"],
                 ),
               );
@@ -158,53 +147,60 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
           // FILTER BUTTONS
           Container(
             color: Colors.blue.shade100,
-
             padding: const EdgeInsets.all(10),
 
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
 
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedFilter = "All";
-                    });
-                  },
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = "All";
+                      });
+                    },
 
-                  child: const Text("All"),
-                ),
+                    child: const Text("All"),
+                  ),
 
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedFilter = "Pending";
-                    });
-                  },
+                  const SizedBox(width: 10),
 
-                  child: const Text("Pending"),
-                ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = "Pending";
+                      });
+                    },
 
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedFilter = "In Progress";
-                    });
-                  },
+                    child: const Text("Pending"),
+                  ),
 
-                  child: const Text("In Progress"),
-                ),
+                  const SizedBox(width: 10),
 
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedFilter = "Solved";
-                    });
-                  },
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = "In Progress";
+                      });
+                    },
 
-                  child: const Text("Solved"),
-                ),
-              ],
+                    child: const Text("In Progress"),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = "Solved";
+                      });
+                    },
+
+                    child: const Text("Solved"),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -212,7 +208,6 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(10),
-
               itemCount: filteredComplaints.length,
 
               itemBuilder: (context, index) {
@@ -237,9 +232,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                                 style: const TextStyle(
                                   fontSize: 14,
-
                                   fontWeight: FontWeight.bold,
-
                                   color: Colors.grey,
                                 ),
                               ),
@@ -251,8 +244,7 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                                 filteredComplaints[index].title,
 
                                 style: const TextStyle(
-                                  fontSize: 18,
-
+                                  fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -260,7 +252,10 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                               const SizedBox(height: 8),
 
                               // DESCRIPTION
-                              Text(filteredComplaints[index].description),
+                              Text(
+                                filteredComplaints[index].description,
+                                style: const TextStyle(fontSize: 16),
+                              ),
 
                               const SizedBox(height: 10),
 
@@ -273,11 +268,13 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
 
                                 decoration: BoxDecoration(
                                   color: Colors.blue.shade100,
-
                                   borderRadius: BorderRadius.circular(20),
                                 ),
 
-                                child: Text(filteredComplaints[index].status),
+                                child: Text(
+                                  filteredComplaints[index].status,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
                               ),
                             ],
                           ),
@@ -306,11 +303,8 @@ class _ComplaintListScreenState extends State<ComplaintListScreen> {
                                         filteredComplaints[index],
                                       )] = ComplaintModel(
                                         room: result["room"],
-
                                         title: result["title"],
-
                                         description: result["description"],
-
                                         status: result["status"],
                                       );
                                     });

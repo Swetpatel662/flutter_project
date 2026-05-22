@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
 
@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         height: double.infinity,
 
         // Background Color
-        color: const Color.fromARGB(144, 247, 235, 12),
+        color: const Color.fromARGB(144, 76, 211, 161),
 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -107,7 +107,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
 
-            SizedBox(height: 298),
+            SizedBox(height: 230),
 
             // BOTTOM SECTION
             Container(
